@@ -108,7 +108,6 @@
       "PowerShell(New-Item -ItemType Directory -Force \"$env:USERPROFILE\\\\.ssh\" | Out-Null; ssh-keyscan github.com 2>$null | Out-File -Append -Encoding ascii \"$env:USERPROFILE\\\\.ssh\\\\known_hosts\"; \"--- chaves existentes: ---\"; Get-ChildItem \"$env:USERPROFILE\\\\.ssh\" -ErrorAction SilentlyContinue | Select-Object Name)",
       "PowerShell(git remote set-url origin https://github.com/cosmethejack/AULA3-DELIVERY.git)",
       "PowerShell(git rm -r --cached --quiet \"apps/frontend/.next\"; git checkout --orphan clean-master; git add -A; git status --short | Select-Object -First 5; \"...\"; \"total staged:\"; \\(git status --short | Measure-Object -Line\\).Lines)",
-      "PowerShell(git commit -q -m \"Initial commit: Projeto AULA 3\"; git branch -D master; git branch -m master; git log --oneline -1; \"--- verificando segredo no novo histórico: ---\"; git grep -I -l \"sk-or-v1-\" $\\(git rev-list --all\\) 2>$null; \"\\(vazio acima = sem segredos no histórico\\)\")",
       "PowerShell(git push -u origin master 2>&1)",
       "Read(//c/Users/Master/**)",
       "PowerShell($root = \"c:\\\\POS -PUC-DAMIÃO-QE-2026\\\\CiCd - Pipelines e Testes Automatizados\\\\AULA 3\"; Get-ChildItem -Path $root -Force | Where-Object { $_.Name -ne '.git' } | Select-Object Mode,Name | Format-Table -AutoSize | Out-String -Width 120)",
