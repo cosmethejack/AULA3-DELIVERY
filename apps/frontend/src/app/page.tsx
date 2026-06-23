@@ -33,7 +33,7 @@ function HomeContent() {
         <h1 style={{ fontSize: "1.8rem" }}>Delivery</h1>
         <button
           style={{ background: "none", border: "1px solid #ddd", borderRadius: 8, padding: "8px 16px", cursor: "pointer", position: "relative" }}
-          onClick={() => router.push("/checkout")}
+          onClick={() => { if (itemCount > 0) router.push("/checkout"); }}
         >
           🛒 Carrinho {itemCount > 0 && <span style={{ background: "#e53935", color: "#fff", borderRadius: 10, padding: "2px 8px", fontSize: "0.8rem", marginLeft: 4 }}>{itemCount}</span>}
         </button>
