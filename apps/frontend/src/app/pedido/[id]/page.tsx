@@ -28,6 +28,8 @@ export default function OrderConfirmPage() {
     SHIPPED: "Enviado", DELIVERED: "Entregue", CANCELLED: "Cancelado",
   };
 
+  const total = order.items.reduce((sum, item) => sum + item.precoUnitario * item.quantidade, 0);
+
   return (
     <div style={{ maxWidth: 600, margin: "0 auto", padding: 24, textAlign: "center" }}>
       <div style={{ fontSize: "3rem", marginBottom: 16 }}>✅</div>
@@ -43,6 +45,10 @@ export default function OrderConfirmPage() {
             <span>{(item.precoUnitario * item.quantidade).toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}</span>
           </div>
         ))}
+        <div style={{ display: "flex", justifyContent: "space-between", marginTop: 12, paddingTop: 12, borderTop: "1px solid #eee", fontSize: "1.2rem", fontWeight: 700 }}>
+          <span>Total</span>
+          <span>{total.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}</span>
+        </div>
       </div>
       <button onClick={() => router.push("/")} style={{
         padding: "12px 32px", background: "#e53935", color: "#fff", border: "none",
