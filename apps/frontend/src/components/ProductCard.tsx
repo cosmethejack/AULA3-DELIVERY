@@ -17,7 +17,10 @@ export function ProductCard({ product }: { product: Product }) {
         </p>
         <button
           className={styles.button}
-          onClick={() => addItem(product)}
+          onClick={(e) => {
+            e.stopPropagation();
+            addItem(product);
+          }}
           disabled={product.estoque <= 0}
         >
           {product.estoque > 0 ? "Adicionar" : "Indisponível"}
