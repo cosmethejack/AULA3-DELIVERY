@@ -112,7 +112,12 @@
       "PowerShell(git push -u origin master 2>&1)",
       "Read(//c/Users/Master/**)",
       "PowerShell($root = \"c:\\\\POS -PUC-DAMIÃO-QE-2026\\\\CiCd - Pipelines e Testes Automatizados\\\\AULA 3\"; Get-ChildItem -Path $root -Force | Where-Object { $_.Name -ne '.git' } | Select-Object Mode,Name | Format-Table -AutoSize | Out-String -Width 120)",
-      "PowerShell(git add -A)"
+      "PowerShell(git add -A)",
+      "PowerShell(git push origin master 2>&1)",
+      "PowerShell($b = \"c:\\\\POS -PUC-DAMIÃO-QE-2026\\\\CiCd - Pipelines e Testes Automatizados\\\\AULA 3\\\\apps\\\\backend\"; & npm --prefix \"$b\" run build 2>&1 | Select-Object -Last 15; \"EXIT_BUILD=$LASTEXITCODE\")",
+      "PowerShell($b = \"c:\\\\POS -PUC-DAMIÃO-QE-2026\\\\CiCd - Pipelines e Testes Automatizados\\\\AULA 3\\\\apps\\\\backend\"; & npm --prefix \"$b\" test -- --testPathPattern \"\\(orders|customers|clerk\\)\" 2>&1 | Select-Object -Last 30; \"EXIT_TEST=$LASTEXITCODE\")",
+      "PowerShell($b = \"c:\\\\POS -PUC-DAMIÃO-QE-2026\\\\CiCd - Pipelines e Testes Automatizados\\\\AULA 3\\\\apps\\\\backend\"; & npm --prefix \"$b\" test -- --testPathPatterns \"orders|customers|clerk\" 2>&1 | Select-Object -Last 30; \"EXIT_TEST=$LASTEXITCODE\")",
+      "PowerShell($b = \"c:\\\\POS -PUC-DAMIÃO-QE-2026\\\\CiCd - Pipelines e Testes Automatizados\\\\AULA 3\\\\apps\\\\backend\"; & npm --prefix \"$b\" run build 2>&1 | Select-Object -Last 6; \"EXIT_BUILD=$LASTEXITCODE\"; & npm --prefix \"$b\" test -- --testPathPatterns \"orders\" 2>&1 | Select-Object -Last 8; \"EXIT_TEST=$LASTEXITCODE\")"
     ],
     "additionalDirectories": [
       "C:\\Users\\Master\\.gemini\\config",
