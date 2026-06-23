@@ -6,6 +6,15 @@ import { CartProvider, useCart } from "@/context/CartContext";
 import { createCustomer } from "@/services/customers.service";
 import { createOrder } from "@/services/orders.service";
 
+function maskPhone(value: string): string {
+  const d = value.replace(/\D/g, "").slice(0, 11);
+  if (d.length === 0) return "";
+  if (d.length <= 2) return `(${d}`;
+  if (d.length <= 6) return `(${d.slice(0, 2)}) ${d.slice(2)}`;
+  if (d.length <= 10) return `(${d.slice(0, 2)}) ${d.slice(2, 6)}-${d.slice(6)}`;
+  return `(${d.slice(0, 2)}) ${d.slice(2, 7)}-${d.slice(7)}`;
+}
+
 function CheckoutContent() {
   const { items, total, clearCart } = useCart();
   const router = useRouter();
@@ -53,7 +62,7 @@ function CheckoutContent() {
           </div>
           <div style={{ marginBottom: 16 }}>
             <label style={{ display: "block", marginBottom: 4, fontWeight: 600 }}>Telefone</label>
-            <input value={telefone} onChange={(e) => setTelefone(e.target.value)} style={{ width: "100%", padding: 10, border: "1px solid #ddd", borderRadius: 8 }} />
+            <input value={telefone} onChange={(e) => setTelefone(maskPhone(e.target.value))} inputMode="numeric" maxLength={15} placeholder="(11) 99999-9999" style={{ width: "100%", padding: 10, border: "1px solid #ddd", borderRadius: 8 }} />
           </div>
           <div style={{ marginBottom: 16 }}>
             <label style={{ display: "block", marginBottom: 4, fontWeight: 600 }}>Endereço de Entrega</label>
