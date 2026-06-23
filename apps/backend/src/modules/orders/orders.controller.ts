@@ -7,7 +7,6 @@ export class OrdersController {
   constructor(private readonly ordersService: OrdersService) {}
 
   @Post()
-  @Roles("CUSTOMER", "ADMIN")
   create(@Body() body: any, @Req() req: any) {
     return this.ordersService.create(body);
   }
@@ -20,7 +19,6 @@ export class OrdersController {
   }
 
   @Get(":id")
-  @Roles("CUSTOMER", "ADMIN")
   findOne(@Param("id") id: string) {
     return this.ordersService.findOne(id);
   }

@@ -19,7 +19,6 @@ export class CustomersController {
   }
 
   @Post()
-  @Roles("CUSTOMER", "ADMIN")
   create(@Body() body: any) {
     return this.customersService.create(body);
   }
