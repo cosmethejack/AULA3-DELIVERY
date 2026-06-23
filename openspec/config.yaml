@@ -1,0 +1,63 @@
+schema: spec-driven
+
+context: |
+  # Tech Stack
+  Frontend: TypeScript, Next.js 16+ (App Router), Vanilla CSS
+  Backend: TypeScript, Node.js 22+, NestJS 11+, Prisma 7+
+  Database: PostgreSQL 15+
+  Identity: Clerk (OIDC / OAuth 2.0)
+  Observability: OpenTelemetry, Grafana Cloud
+  DevOps: Docker, Terraform, GitHub Actions, npm Workspaces
+
+  # Architecture
+  - Backend como fonte única de verdade
+  - Política Backend for Frontend (BFF)
+  - Clean Architecture + SOLID
+  - Comunicação via APIs REST (JSON/HTTPS)
+  - Versionamento via URI (/v1/)
+  - Erros seguem RFC 9457 (Problem Details)
+
+  # Monorepo
+  apps/
+    frontend/src/   # app/ components/ features/ services/ hooks/ types/
+    backend/src/    # core/{auth,database,observability,audit} + modules/{catalog,orders,customers}
+  infra/   # Terraform
+  docs/    # Documentação
+
+  # Security
+  - Frontend não implementa autenticação/autorização
+  - Clerk gerencia identidade (login, logout, MFA, sessão)
+  - RBAC: ADMIN e CUSTOMER, roles no provedor de identidade
+  - Guards e Decorators NestJS protegem recursos
+  - Proibido SDKs/componentes oficiais do Clerk no frontend
+
+  # Test Quality
+  - Lint: ESLint
+  - Unit: Jest
+  - Integration: Jest + Supertest
+  - E2E: Playwright
+  - Cobertura mínima: backend 80% (linhas e branches), frontend 70%
+  - Happy Path, Sad Path e Edge Cases obrigatórios
+  - Proibido console.log() — logging estruturado
+
+rules:
+  proposal:
+    - Verificar impacto arquitetural, autenticação, autorização, observabilidade e testes
+    - MVP sem multi-tenancy, sem auth própria, sem SDKs Clerk no frontend
+    - Manter escopo dentro dos limites do MVP definidos em architecture.md
+  design:
+    - Componentes próprios da aplicação (proibido componentes oficiais Clerk)
+    - Integração com APIs exclusivamente via camada services/
+    - Sem regras de negócio no frontend
+    - Server Actions apenas como camada de transporte (sem DB, Prisma ou regras)
+  spec:
+    - Erros de API seguem RFC 9457 (type, title, status, detail, instance)
+    - Operações CUD em entidades críticas geram auditoria (usuário, objeto, ação, payload, timestamp)
+    - Especificar Happy Path, Sad Path e Edge Cases
+    - Paginação obrigatória para coleções
+  tasks:
+    - Alteração de schema gera migration Prisma versionada
+    - Executar lint + testes antes de concluir
+    - Proibido raw queries SQL — usar Prisma com parâmetros
+    - Proibido console.log() — usar logging estruturado
+    - Atualizar documentação afetada

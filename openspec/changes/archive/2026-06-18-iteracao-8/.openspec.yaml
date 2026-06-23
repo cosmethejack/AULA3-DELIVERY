@@ -1,0 +1,6 @@
+schema: spec-driven
+created: 2026-06-18
+title: CI/CD (GitHub Actions, Terraform, Deploy)
+risk: medio
+dependencies: [iteracao 1, iteracao 2, iteracao 3, iteracao 4, iteracao 5, iteracao 6, iteracao 7]
+status: proposed

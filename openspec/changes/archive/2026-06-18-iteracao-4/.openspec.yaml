@@ -1,0 +1,6 @@
+schema: spec-driven
+created: 2026-06-18
+title: Frontend Vitrine (Catálogo, Carrinho, Checkout)
+risk: medio
+dependencies: [iteracao 3]
+status: proposed

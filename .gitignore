@@ -1,0 +1,14 @@
+.env
+
+# Next.js / build artifacts
+.next/
+dist/
+build/
+
+# Playwright
+node_modules/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth/

@@ -1,0 +1,6 @@
+schema: spec-driven
+created: 2026-06-18
+title: Frontend Tracking (Acompanhamento de Pedidos)
+risk: pequeno
+dependencies: [iteracao 3, iteracao 5]
+status: proposed

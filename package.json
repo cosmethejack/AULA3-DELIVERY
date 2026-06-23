@@ -1,0 +1,23 @@
+{
+  "name": "aula-3",
+  "version": "1.0.0",
+  "description": "> Plataforma de **e-micro-commerce** de fluxo duplo: uma vitrine digital simples para o **cliente** realizar pedidos e um painel de gestão completo para o **empreendedor** — do pedido ao pagamento.",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "lint": "npm --prefix apps/backend run lint && npm --prefix apps/frontend run lint",
+    "test": "npm --prefix apps/backend run test && npm --prefix apps/frontend run test",
+    "build": "npm --prefix apps/backend run build && npm --prefix apps/frontend run build",
+    "dev": "node scripts/dev.mjs"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@playwright/test": "^1.61.0",
+    "@types/node": "^25.9.3"
+  }
+}
