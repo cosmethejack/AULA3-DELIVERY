@@ -2,42 +2,80 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches: [master]
   pull_request:
-    branches: [main]
+    branches: [master]
 
 jobs:
-  backend:
-    name: Backend
+  lint:
+    name: Lint
     runs-on: ubuntu-latest
-    defaults:
-      run:
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+      - name: Install backend dependencies
+        run: npm ci
         working-directory: apps/backend
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: 'npm'
-      - run: npm ci
-      - run: npx prisma generate
-      - run: npm run lint
-      - run: npm run test
-      - run: npm run build
-
-  frontend:
-    name: Frontend
-    runs-on: ubuntu-latest
-    defaults:
-      run:
+      - name: Generate Prisma client
+        run: npx prisma generate
+        working-directory: apps/backend
+      - name: Lint backend (ESLint)
+        run: npm run lint
+        working-directory: apps/backend
+      - name: Install frontend dependencies
+        run: npm ci
         working-directory: apps/frontend
+      - name: Lint frontend (ESLint)
+        run: npm run lint
+        working-directory: apps/frontend
+      - name: Validate workflows (actionlint)
+        uses: raven-actions/actionlint@v2
+
+  coverage-gate:
+    name: Coverage Gate
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: 'npm'
-      - run: npm ci
-      - run: npm run lint
-      - run: npm run test
-      - run: npm run build
+
+      # --- Backend (gate 80% linhas/branches) ---
+      - name: Install backend dependencies
+        run: npm ci
+        working-directory: apps/backend
+      - name: Generate Prisma client
+        run: npx prisma generate
+        working-directory: apps/backend
+      - name: Backend coverage gate
+        run: npm run test:cov
+        working-directory: apps/backend
+      - name: Build backend
+        run: npm run build
+        working-directory: apps/backend
+
+      # --- Frontend (gate 70% linhas/branches) ---
+      - name: Install frontend dependencies
+        run: npm ci
+        working-directory: apps/frontend
+      - name: Frontend coverage gate
+        run: npm run test:cov
+        working-directory: apps/frontend
+      - name: Build frontend
+        run: npm run build
+        working-directory: apps/frontend
+
+      # --- Relatórios publicados mesmo em falha do gate ---
+      - name: Upload coverage reports
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-reports
+          path: |
+            apps/backend/coverage/
+            apps/frontend/coverage/
+          retention-days: 30

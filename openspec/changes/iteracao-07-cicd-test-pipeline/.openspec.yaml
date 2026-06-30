@@ -1,0 +1,6 @@
+schema: spec-driven
+created: 2026-06-30
+title: Pipeline de CI/CD — Lint + Testes + Gates de Cobertura
+risk: baixo
+dependencies: [iteracao-01-project-foundation]
+status: proposed

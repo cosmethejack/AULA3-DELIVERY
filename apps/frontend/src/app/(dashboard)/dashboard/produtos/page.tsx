@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
 import { authedGet, authedPost, authedPatch, authedDelete } from "@/services/api-admin";
 import type { Product } from "@/types";
 
@@ -13,7 +12,6 @@ export default function ProdutosPage() {
   const [nome, setNome] = useState("");
   const [descricao, setDescricao] = useState("");
   const [preco, setPreco] = useState("");
-  const router = useRouter();
 
   async function loadProducts() {
     try {

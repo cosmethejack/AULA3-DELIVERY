@@ -7,7 +7,7 @@ import { CartProvider, useCart } from "@/context/CartContext";
 import { ProductCard } from "@/components/ProductCard";
 import { CategoryFilter } from "@/components/CategoryFilter";
 import { CartDrawer } from "@/components/CartDrawer";
-import type { Category, Product } from "@/types";
+import type { Category } from "@/types";
 
 function HomeContent() {
   const [categories, setCategories] = useState<Category[]>([]);

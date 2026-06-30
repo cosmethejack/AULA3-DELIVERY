@@ -5,6 +5,10 @@
 dist/
 build/
 
+# Coverage reports
+coverage/
+**/coverage/
+
 # Playwright
 node_modules/
 /test-results/

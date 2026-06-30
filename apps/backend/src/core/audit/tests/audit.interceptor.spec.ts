@@ -1,5 +1,4 @@
 import { AuditInterceptor } from "../audit.interceptor";
-import { AuditService } from "../audit.service";
 import { of } from "rxjs";
 
 describe("AuditInterceptor", () => {

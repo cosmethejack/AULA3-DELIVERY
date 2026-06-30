@@ -1,5 +1,5 @@
 import { ProblemDetailsFilter } from "./problem-details.filter";
-import { BadRequestException, ForbiddenException, HttpException, HttpStatus } from "@nestjs/common";
+import { BadRequestException, ForbiddenException } from "@nestjs/common";
 
 describe("ProblemDetailsFilter", () => {
   let filter: ProblemDetailsFilter;
