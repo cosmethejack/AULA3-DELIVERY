@@ -1,0 +1,6 @@
+schema: spec-driven
+created: 2026-06-30
+title: Fundação de Dados — Prisma, Schema & Migration Inicial
+risk: medio
+dependencies: [iteracao-02-backend-core-platform]
+status: proposed

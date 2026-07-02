@@ -19,11 +19,17 @@ export default tseslint.config(
       globals: { ...globals.node, ...globals.jest },
     },
     rules: {
+      "no-console": "error",
       "@typescript-eslint/no-explicit-any": "warn",
       "@typescript-eslint/no-unused-vars": [
         "error",
         { argsIgnorePattern: "^_", varsIgnorePattern: "^_" },
       ],
     },
+  },
+  {
+    // Sink final do logging estruturado: único ponto autorizado a usar console.
+    files: ["src/core/observability/logger.service.ts"],
+    rules: { "no-console": "off" },
   },
 );

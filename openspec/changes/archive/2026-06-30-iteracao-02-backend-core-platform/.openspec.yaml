@@ -1,0 +1,6 @@
+schema: spec-driven
+created: 2026-06-30
+title: Plataforma Core do Backend — NestJS, RFC 9457, Swagger
+risk: baixo
+dependencies: [iteracao-01-project-foundation]
+status: proposed

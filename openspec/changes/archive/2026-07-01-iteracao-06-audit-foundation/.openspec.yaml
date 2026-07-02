@@ -1,0 +1,6 @@
+schema: spec-driven
+created: 2026-06-30
+title: Fundação de Auditoria — Trilha de CUD
+risk: baixo
+dependencies: [iteracao-02-backend-core-platform, iteracao-04-database-schema-foundation]
+status: proposed

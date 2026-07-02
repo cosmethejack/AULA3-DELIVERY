@@ -1,0 +1,6 @@
+schema: spec-driven
+created: 2026-06-30
+title: Registro & Login de Cliente — Formulários Próprios
+risk: medio
+dependencies: [iteracao-05-identity-rbac-foundation, iteracao-12-customer-crud-api]
+status: proposed

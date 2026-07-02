@@ -5,7 +5,25 @@ vi.mock("./api", () => ({
 }));
 
 import { apiGet } from "./api";
-import { getProducts } from "./catalog.service";
+import { getProducts, getCategories, getProduct } from "./catalog.service";
+
+describe("catalog.service.getCategories/getProduct", () => {
+  beforeEach(() => vi.clearAllMocks());
+
+  it("getCategories delega para apiGet('/catalog')", async () => {
+    (apiGet as ReturnType<typeof vi.fn>).mockResolvedValue([{ id: "1", nome: "Bebidas" }]);
+    const cats = await getCategories();
+    expect(apiGet).toHaveBeenCalledWith("/catalog");
+    expect(cats).toHaveLength(1);
+  });
+
+  it("getProduct delega para apiGet('/catalog/:id')", async () => {
+    (apiGet as ReturnType<typeof vi.fn>).mockResolvedValue({ id: "p1", nome: "Coca" });
+    const p = await getProduct("p1");
+    expect(apiGet).toHaveBeenCalledWith("/catalog/p1");
+    expect(p.nome).toBe("Coca");
+  });
+});
 
 describe("catalog.service.getProducts", () => {
   beforeEach(() => {

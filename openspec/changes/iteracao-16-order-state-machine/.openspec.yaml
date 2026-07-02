@@ -1,0 +1,6 @@
+schema: spec-driven
+created: 2026-06-30
+title: Máquina de Estados do Pedido — RF-02/RF-06
+risk: medio
+dependencies: [iteracao-15-cart-and-checkout, iteracao-06-audit-foundation]
+status: proposed

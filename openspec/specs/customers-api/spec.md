@@ -5,7 +5,7 @@ Módulo de clientes do backend: CRUD com soft delete para clientes com pedidos a
 ## Requirements
 
 ### Requirement: CRUD de Clientes
-O sistema DEVE expor endpoints REST para gerenciar clientes. Clientes com pedidos associados não podem ser excluídos (apenas desativados).
+O sistema DEVE (MUST) expor endpoints REST para gerenciar clientes. Clientes com pedidos associados não podem ser excluídos (apenas desativados).
 
 #### Scenario: Criar cliente
 - **WHEN** usuário envia POST /v1/customers com dados válidos
@@ -16,7 +16,7 @@ O sistema DEVE expor endpoints REST para gerenciar clientes. Clientes com pedido
 - **THEN** sistema retorna 409 e cliente é marcado como inativo
 
 ### Requirement: Paginação em Coleções
-Toda listagem DEVE suportar paginação via query params `?page=1&limit=20`.
+Toda listagem DEVE (MUST) suportar paginação via query params `?page=1&limit=20`.
 
 #### Scenario: Paginação com página inválida
 - **WHEN** cliente acessa listagem com page=0

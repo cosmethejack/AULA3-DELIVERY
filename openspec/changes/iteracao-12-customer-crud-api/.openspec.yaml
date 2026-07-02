@@ -1,0 +1,6 @@
+schema: spec-driven
+created: 2026-06-30
+title: API de Clientes — RF-05
+risk: baixo
+dependencies: [iteracao-04-database-schema-foundation, iteracao-05-identity-rbac-foundation, iteracao-06-audit-foundation]
+status: proposed

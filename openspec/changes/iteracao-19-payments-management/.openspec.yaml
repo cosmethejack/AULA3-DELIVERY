@@ -1,0 +1,6 @@
+schema: spec-driven
+created: 2026-06-30
+title: Gestão de Pagamentos — RF-06
+risk: medio
+dependencies: [iteracao-16-order-state-machine, iteracao-06-audit-foundation]
+status: proposed

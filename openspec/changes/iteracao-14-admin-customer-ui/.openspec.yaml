@@ -1,0 +1,6 @@
+schema: spec-driven
+created: 2026-06-30
+title: UI de Gestão de Clientes — RF-05
+risk: baixo
+dependencies: [iteracao-12-customer-crud-api, iteracao-05-identity-rbac-foundation]
+status: proposed

@@ -1,0 +1,6 @@
+schema: spec-driven
+created: 2026-06-30
+title: Vitrine Pública — RF-01
+risk: baixo
+dependencies: [iteracao-09-catalog-products-api]
+status: proposed

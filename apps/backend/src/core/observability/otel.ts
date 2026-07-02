@@ -25,5 +25,5 @@ const sdk = new NodeSDK({
 sdk.start();
 
 process.on("SIGTERM", () => {
-  sdk.shutdown().catch(console.error);
+  sdk.shutdown().catch((err) => process.stderr.write(`OTel shutdown error: ${String(err)}\n`));
 });

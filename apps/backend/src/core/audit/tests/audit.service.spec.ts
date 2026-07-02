@@ -53,4 +53,19 @@ describe("AuditService", () => {
 
     expect(prisma.auditLog.create).toHaveBeenCalled();
   });
+
+  it("deve ofuscar campos sensíveis no payload (redaction)", async () => {
+    prisma.auditLog.create.mockResolvedValue({ id: "log-3" });
+
+    await service.log({
+      acao: "USER_LOGIN",
+      entidade: "User",
+      payload: { email: "a@b.com", password: "segredo", nested: { token: "abc" } },
+    });
+
+    const persisted = prisma.auditLog.create.mock.calls[0][0].data.payload;
+    expect(persisted.email).toBe("a@b.com");
+    expect(persisted.password).toBe("[REDACTED]");
+    expect(persisted.nested.token).toBe("[REDACTED]");
+  });
 });

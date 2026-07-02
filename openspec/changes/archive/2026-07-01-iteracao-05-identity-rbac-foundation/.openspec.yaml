@@ -1,0 +1,6 @@
+schema: spec-driven
+created: 2026-06-30
+title: Fundação de Identidade & RBAC — Clerk BFF
+risk: medio
+dependencies: [iteracao-02-backend-core-platform, iteracao-04-database-schema-foundation]
+status: proposed

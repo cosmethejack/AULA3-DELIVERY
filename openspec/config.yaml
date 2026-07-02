@@ -1,21 +1,29 @@
 schema: spec-driven
 
 context: |
+  # Produto
+  e-micro-commerce (DevAI): plataforma de fluxo duplo para microempreendedores.
+  - Vitrine digital para o cliente realizar pedidos (consulta de catálogo é pública).
+  - Painel de gestão (admin) do pedido ao pagamento.
+  Métricas de sucesso: +20% total recebido (12m), -10% total pendente (12m).
+  MVP: sem multi-tenancy, sem gateway de pagamento, sem e-mail/WhatsApp.
+
   # Tech Stack
   Frontend: TypeScript, Next.js 16+ (App Router), Vanilla CSS
-  Backend: TypeScript, Node.js 22+, NestJS 11+, Prisma 7+
-  Database: PostgreSQL 15+
+  Backend: TypeScript, Node.js 24+, NestJS 11+, Prisma 7+
+  Database: PostgreSQL 15+ (padrão, portável — sem extensões de fornecedor)
   Identity: Clerk (OIDC / OAuth 2.0)
   Observability: OpenTelemetry, Grafana Cloud
   DevOps: Docker, Terraform, GitHub Actions, npm Workspaces
+  Testes: ESLint, Jest, Supertest, Playwright
 
   # Architecture
-  - Backend como fonte única de verdade
-  - Política Backend for Frontend (BFF)
-  - Clean Architecture + SOLID
-  - Comunicação via APIs REST (JSON/HTTPS)
-  - Versionamento via URI (/v1/)
+  - Backend NestJS como fonte única de verdade (toda regra de negócio no backend)
+  - Política Backend for Frontend (BFF); proibido frontend acessar DB/Prisma/Supabase
+  - Clean Architecture + SOLID; DTOs com class-validator; decorar APIs para OpenAPI
+  - Comunicação via APIs REST (JSON/HTTPS), versionamento via URI (/v1/)
   - Erros seguem RFC 9457 (Problem Details)
+  - Paginação obrigatória em coleções; filtros/ordenação/busca quando aplicável
 
   # Monorepo
   apps/
@@ -24,40 +32,78 @@ context: |
   infra/   # Terraform
   docs/    # Documentação
 
+  # Domínio
+  Entidades: Categoria, Produto, Cliente, Pedido, ItemPedido, Pagamento.
+  - Valor total do pedido = soma dos itens; calculado na confirmação, NÃO persistido.
+  - Máquina de estados do pedido: Novo → Pago → Preparação → Faturado → Despachado → Entregue;
+    Cancelado a partir de qualquer estado exceto Entregue.
+  - Estoque validado na criação E reconfirmado na confirmação do pedido.
+  - Produtos inativos não aparecem na vitrine nem podem ser vendidos.
+  - Produtos sem estoque são visíveis na vitrine, mas não adicionáveis ao carrinho.
+  - Apenas ADMIN registra pagamentos (método informado no registro manual).
+  - Pedido é considerado pago quando existir pagamento com status Confirmado.
+  - Clientes com pedidos associados não são excluídos, apenas desativados.
+
+  # Design System (docs/design.md)
+  - Botão = sempre pílula (rounded.pill); nunca retângulo arredondado
+  - Dois canvas: escuro (#000) × claro/cream — nunca misturar; proibida 3ª cor de canvas
+  - Tipografia: NeueHaasGrotesk Display peso 330 (display) + Inter 420–550 (UI); ss03 global
+  - Acentos aloe/pistachio só na trilha clara (fills de superfície, nunca atrás de texto)
+  - Acessibilidade: touch targets e inputs ≥ 44×44px (WCAG AAA)
+
   # Security
-  - Frontend não implementa autenticação/autorização
-  - Clerk gerencia identidade (login, logout, MFA, sessão)
-  - RBAC: ADMIN e CUSTOMER, roles no provedor de identidade
-  - Guards e Decorators NestJS protegem recursos
-  - Proibido SDKs/componentes oficiais do Clerk no frontend
+  - Frontend NÃO implementa autenticação/autorização/credenciais
+  - Toda decisão de autorização é exclusiva do backend
+  - Clerk gerencia identidade (login, logout, recuperação, MFA, sessão)
+  - Fluxo de auth: Frontend → Backend (BFF) → Clerk; backend valida tokens
+  - RBAC: ADMIN e CUSTOMER, roles no provedor de identidade; Guards/Decorators NestJS
+  - Endpoints públicos: catálogo e produtos ativos
+  - Endpoints protegidos: pedidos, administração, dashboards
+  - Proibido SDKs/componentes oficiais do Clerk no frontend (formulários próprios)
+  - IDOR: validar propriedade dos recursos via identidade autenticada
+  - Proibido raw SQL (Prisma parametrizado); acesso a dados exclusivamente via Prisma
+  - Transporte HTTPS/TLS 1.2+; headers CSP, HSTS, X-Content-Type-Options: nosniff
+  - CORS com whitelist explícita; rate limit 100 req/min por IP, 1000 req/min por usuário
+
+  # Observabilidade
+  - Todo endpoint HTTP gera traces OpenTelemetry (propagar trace_id, span_id, request_id)
+  - Logs, métricas e traces compartilham o mesmo correlation id
+  - Logging estruturado obrigatório (campos: timestamp, level, service, trace_id, user_id)
+  - Proibido console.log()
 
   # Test Quality
-  - Lint: ESLint
-  - Unit: Jest
-  - Integration: Jest + Supertest
-  - E2E: Playwright
-  - Cobertura mínima: backend 80% (linhas e branches), frontend 70%
-  - Happy Path, Sad Path e Edge Cases obrigatórios
-  - Proibido console.log() — logging estruturado
+  - Lint: ESLint | Unit: Jest | Integração: Jest + Supertest | E2E: Playwright
+  - Cobertura mínima: backend 80% (linhas e branches); frontend 70% (linhas e branches)
+  - Toda alteração de regra de negócio EXIGE testes (não remover testes existentes)
+  - Cobrir obrigatoriamente Happy Path, Sad Path e Edge Cases
+  - Testar estados/transições do pedido, validação de estoque e cálculo do total
+  - Migrations Prisma versionadas para toda alteração de schema
+    (proibido alterar tabela/schema manualmente)
 
 rules:
   proposal:
     - Verificar impacto arquitetural, autenticação, autorização, observabilidade e testes
-    - MVP sem multi-tenancy, sem auth própria, sem SDKs Clerk no frontend
+    - MVP sem multi-tenancy (sem tenant_id, TenantProvider/Context/Middleware, banco/schema por tenant)
+    - Sem auth própria, sem SDKs/componentes Clerk no frontend
     - Manter escopo dentro dos limites do MVP definidos em architecture.md
   design:
     - Componentes próprios da aplicação (proibido componentes oficiais Clerk)
     - Integração com APIs exclusivamente via camada services/
-    - Sem regras de negócio no frontend
-    - Server Actions apenas como camada de transporte (sem DB, Prisma ou regras)
+    - Sem regras de negócio no frontend; páginas sem lógica de negócio
+    - Server Actions apenas como camada de transporte (sem DB, Prisma, regras ou serviços protegidos)
+    - Seguir o design system em docs/design.md (botões pill, sistema de tokens, sem terceira cor de canvas)
   spec:
     - Erros de API seguem RFC 9457 (type, title, status, detail, instance)
     - Operações CUD em entidades críticas geram auditoria (usuário, objeto, ação, payload, timestamp)
     - Especificar Happy Path, Sad Path e Edge Cases
-    - Paginação obrigatória para coleções
+    - Paginação obrigatória para coleções; declarar filtros/ordenação quando aplicável
+    - Endpoints respeitam a matriz pública/protegida e o RBAC (ADMIN/CUSTOMER)
+    - Contratos versionados (/v1/) e documentáveis via OpenAPI
   tasks:
-    - Alteração de schema gera migration Prisma versionada
-    - Executar lint + testes antes de concluir
+    - Alteração de schema gera migration Prisma versionada (proibido alterar tabelas manualmente)
+    - Toda alteração de regra de negócio acompanha testes (unit/integração/E2E conforme a camada)
+    - Executar lint + testes (unitários e integração afetados) antes de concluir
+    - Garantir cobertura mínima (backend 80% / frontend 70%)
     - Proibido raw queries SQL — usar Prisma com parâmetros
-    - Proibido console.log() — usar logging estruturado
-    - Atualizar documentação afetada
+    - Proibido console.log() — usar logging estruturado com correlation id
+    - Atualizar documentação afetada e informar arquivos modificados

@@ -5,7 +5,7 @@ Autenticação do admin no frontend: formulário próprio de login, gerenciament
 ## Requirements
 
 ### Requirement: Login com Formulário Próprio
-A página `/sign-in` DEVE exibir formulário de e-mail/senha que envia credenciais ao backend (BFF), que autentica via Clerk. Proibido uso de SDK/componentes oficiais do Clerk.
+A página `/sign-in` DEVE (MUST) exibir formulário de e-mail/senha que envia credenciais ao backend (BFF), que autentica via Clerk. Proibido uso de SDK/componentes oficiais do Clerk.
 
 #### Scenario: Login bem-sucedido
 - **WHEN** usuário informa e-mail e senha válidos
@@ -16,7 +16,7 @@ A página `/sign-in` DEVE exibir formulário de e-mail/senha que envia credencia
 - **THEN** formulário exibe mensagem "Credenciais inválidas"
 
 ### Requirement: AuthContext com Token JWT
-O frontend DEVE gerenciar o token JWT em memória via `AuthContext`. Requisições autenticadas usam `apiClient.ts` que injeta o token no header.
+O frontend DEVE (MUST) gerenciar o token JWT em memória via `AuthContext`. Requisições autenticadas usam `apiClient.ts` que injeta o token no header.
 
 #### Scenario: Token expirado
 - **WHEN** token JWT expira durante a sessão
