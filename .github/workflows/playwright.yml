@@ -29,6 +29,8 @@ jobs:
     env:
       DATABASE_URL: postgresql://postgres:postgres@localhost:5432/delivery
       CLERK_SECRET_KEY: ${{ secrets.CLERK_SECRET_KEY }}
+      NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY }}
+      CLERK_JWT_KEY: ${{ secrets.CLERK_JWT_KEY }}
 
     steps:
       - uses: actions/checkout@v4
@@ -72,5 +74,3 @@ jobs:
           name: playwright-report
           path: playwright-report/
           retention-days: 30
-      NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY }}
-      CLERK_JWT_KEY: ${{ secrets.CLERK_JWT_KEY }}
