@@ -1,11 +1,19 @@
 # Plano de Testes — Fluxo de Login (Clerk)
 
-> Gerado seguindo o workflow `playwright-test-planner`. Base de exploração: spec
-> [openspec/specs/auth/spec.md](../openspec/specs/auth/spec.md),
+> Gerado seguindo o workflow [.agents/prompts/playwright-test-planner.md](../.agents/prompts/playwright-test-planner.md).
+> Base de exploração: spec [openspec/specs/auth/spec.md](../openspec/specs/auth/spec.md),
 > [openspec/specs/admin-auth/spec.md](../openspec/specs/admin-auth/spec.md) e o código real
 > ([sign-in/page.tsx](../apps/frontend/src/app/sign-in/page.tsx),
 > [(dashboard)/layout.tsx](../apps/frontend/src/app/(dashboard)/layout.tsx),
-> [services/api.ts](../apps/frontend/src/services/api.ts)).
+> [dashboard/resumo/page.tsx](../apps/frontend/src/app/(dashboard)/dashboard/resumo/page.tsx),
+> [services/api.ts](../apps/frontend/src/services/api.ts),
+> [core/auth/clerk.guard.ts](../apps/backend/src/core/auth/clerk.guard.ts),
+> [modules/dashboard/dashboard.controller.ts](../apps/backend/src/modules/dashboard/dashboard.controller.ts)).
+>
+> Revisado em 2026-07-02 contra o estado atual do código e da suíte implementada
+> ([specs/login-flow.spec.ts](login-flow.spec.ts)) — nenhuma regra de negócio mudou desde a
+> versão anterior deste plano; a revisão corrigiu a tabela de localizadores (§3) e adicionou a
+> rastreabilidade cenário → teste (§7).
 
 ## 1. Objetivo e escopo
 
@@ -40,9 +48,9 @@ retorna um JWT. O escopo cobre:
 
 | Elemento            | Localizador sugerido                                  | Notas                                  |
 |---------------------|------------------------------------------------------|----------------------------------------|
-| Título              | `getByRole("heading", { name: "Admin Delivery" })`   | —                                      |
-| Campo Email         | `getByLabel("Email")` / `input[type=email]`          | `required`                             |
-| Campo Senha         | `getByLabel("Senha")` / `input[type=password]`       | `required`                             |
+| Título              | `getByRole("heading", { name: "Admin Delivery" })`   | é o `<h1>` do formulário, não da página `(dashboard)` (que usa "Delivery Admin") |
+| Campo Email         | `input[type="email"]`                                | `required`; **não** usar `getByLabel` — o `<label>` não tem `htmlFor`/`id` associado ao input |
+| Campo Senha         | `input[type="password"]`                             | `required`; mesma ressalva de `getByLabel` acima |
 | Botão Entrar        | `getByRole("button", { name: "Entrar" })`            | vira "Entrando..." e `disabled` no loading |
 | Mensagem de erro    | texto `Credenciais inválidas` / `Erro de conexão`    | só renderiza quando há erro            |
 
@@ -113,7 +121,28 @@ retorna um JWT. O escopo cobre:
 - **Token em localStorage** (`admin-token`): preferir definir o token diretamente no `localStorage`
   como setup de testes de dashboard (HP-03/HP-04) em vez de repetir o login em cada cenário.
 
+## 7. Rastreabilidade — cenário → teste
+
+Todos os 21 cenários já estão implementados em [specs/login-flow.spec.ts](login-flow.spec.ts).
+Status confirmado nesta revisão:
+
+| IDs                              | Status na suíte                                                        |
+|-----------------------------------|-------------------------------------------------------------------------|
+| HP-01 .. HP-04                   | Implementados, deterministas (`page.route` mocka o login)               |
+| EC-01 .. EC-05                   | Implementados, deterministas (validação nativa HTML5 / localStorage)    |
+| ER-01 .. ER-03                   | Implementados, deterministas                                            |
+| ER-04                             | Implementado como `test.fail()` — bug conhecido (§6), falha intencional documentada |
+| API-02, API-03                   | Implementados, deterministas (não dependem de credencial Clerk real)    |
+| API-05, API-06                   | Implementados com JWT real via `tests/helpers/auth.ts`; usam `test.skip` se o Clerk estiver indisponível |
+| API-01, API-04                   | `test.fixme` — exigem JWT com role `ADMIN`, mas a credencial de teste configurada (`testcheckout@delivery.com`) só tem role `CUSTOMER` |
+
+**Gap aberto:** para destravar API-01/API-04 é preciso criar (ou configurar) um usuário de teste
+com role `ADMIN` no Clerk e um session template que emita a claim `role` — hoje isso não existe no
+ambiente, então esses dois cenários permanecem como `fixme` até essa credencial existir.
+
 ---
 
 **Resumo:** 21 cenários — 4 happy paths, 5 edge cases, 4 de erro de UI, 6 de backend/RBAC, mais 2
-fluxos de proteção de rota cobertos transversalmente.
+fluxos de proteção de rota cobertos transversalmente. Todos implementados em
+`specs/login-flow.spec.ts`; 2 com execução bloqueada por falta de credencial ADMIN (`fixme`) e 1
+falha intencional documentando um bug conhecido (`test.fail`).
