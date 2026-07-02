@@ -17,3 +17,5 @@ node_modules/
 /playwright/.cache/
 /playwright/.auth/
 *.mp4
+
+_materiais_aula/
