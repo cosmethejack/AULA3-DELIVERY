@@ -80,8 +80,7 @@ jobs:
             apps/frontend/coverage/
           retention-days: 30
 
-  playwright-e2e:
-    name: Playwright E2E Tests
+  playwright-test:
     timeout-minutes: 60
     runs-on: ubuntu-latest
 
