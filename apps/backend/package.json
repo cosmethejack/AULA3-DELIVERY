@@ -6,7 +6,8 @@
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
     "prisma:seed": "prisma db seed",
-    "lint": "tsc --noEmit",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
     "build": "tsc",
     "dev": "node --watch --require ts-node/register src/main.ts",
     "start": "node dist/main.js",
@@ -33,12 +34,15 @@
       "modules/**/*.(t|j)s",
       "!**/*.module.ts",
       "!**/tests/**",
-      "!**/generated/**",
-      "!**/catalog/**",
-      "!**/customers/**",
-      "!**/observability/**"
+      "!**/generated/**"
     ],
     "coverageDirectory": "../coverage",
+    "coverageThreshold": {
+      "global": {
+        "lines": 80,
+        "branches": 80
+      }
+    },
     "testEnvironment": "node"
   },
   "devDependencies": {
@@ -47,18 +51,22 @@
     "@types/jest": "^30.0.0",
     "@types/pg": "^8.20.0",
     "@types/supertest": "^7.2.0",
+    "eslint": "^9.39.4",
+    "globals": "^17.7.0",
     "jest": "^30.4.2",
     "prisma": "^7.0.0",
     "supertest": "^7.2.2",
     "ts-jest": "^29.4.11",
     "ts-node": "^10.9.2",
-    "typescript": "^5.5.0"
+    "typescript": "^5.5.0",
+    "typescript-eslint": "^8.62.1"
   },
   "dependencies": {
     "@nestjs/common": "^11.1.27",
     "@nestjs/config": "^4.0.4",
     "@nestjs/core": "^11.1.27",
     "@nestjs/platform-express": "^11.1.27",
+    "@nestjs/swagger": "^11.4.5",
     "@opentelemetry/auto-instrumentations-node": "^0.77.0",
     "@opentelemetry/exporter-metrics-otlp-http": "^0.219.0",
     "@opentelemetry/exporter-trace-otlp-http": "^0.219.0",

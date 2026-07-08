@@ -16,9 +16,11 @@ test('adicionar X-Burger ao carrinho e finalizar pedido', async ({ page }) => {
 
   await page.getByRole('heading', { name: 'Delivery' }).waitFor();
 
-  await page.getByRole('article').filter({ hasText: 'X-Burger' }).getByRole('button', { name: 'Adicionar' }).click();
+  const xBurgerCard = page.getByRole('article').filter({ hasText: 'X-Burger' });
+  await xBurgerCard.getByRole('button', { name: 'Adicionar' }).click();
+  await xBurgerCard.getByRole('heading', { name: 'X-Burger' }).click();
 
-  await page.getByRole('heading', { name: 'X-Burger' }).waitFor();
+  await page.getByRole('heading', { name: 'X-Burger', level: 1 }).waitFor();
 
   await page.getByRole('button', { name: 'Adicionar ao Carrinho' }).click();
 

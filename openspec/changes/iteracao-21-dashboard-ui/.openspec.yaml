@@ -1,0 +1,6 @@
+schema: spec-driven
+created: 2026-06-30
+title: UI do Dashboard — RF-07
+risk: baixo
+dependencies: [iteracao-20-dashboard-metrics-api, iteracao-05-identity-rbac-foundation]
+status: proposed

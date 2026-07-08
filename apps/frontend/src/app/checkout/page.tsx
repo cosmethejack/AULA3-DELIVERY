@@ -40,7 +40,7 @@ function CheckoutContent() {
       });
       clearCart();
       router.push(`/pedido/${order.id}`);
-    } catch (err) {
+    } catch {
       setError("Erro ao processar pedido. Tente novamente.");
     } finally {
       setLoading(false);

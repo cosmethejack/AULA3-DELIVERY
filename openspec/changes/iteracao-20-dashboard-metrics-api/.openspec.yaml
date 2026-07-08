@@ -1,0 +1,6 @@
+schema: spec-driven
+created: 2026-06-30
+title: API de Métricas do Dashboard — RF-07
+risk: baixo
+dependencies: [iteracao-16-order-state-machine, iteracao-19-payments-management]
+status: proposed

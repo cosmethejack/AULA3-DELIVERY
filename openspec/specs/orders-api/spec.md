@@ -5,7 +5,7 @@ Módulo de pedidos do backend: máquina de estados, validação de estoque na cr
 ## Requirements
 
 ### Requirement: Máquina de Estados do Pedido
-O sistema DEVE implementar a máquina de estados: Novo → Pago → Preparação → Faturado → Despachado → Entregue. Cancelamento permitido de qualquer estado exceto Entregue.
+O sistema DEVE (MUST) implementar a máquina de estados: Novo → Pago → Preparação → Faturado → Despachado → Entregue. Cancelamento permitido de qualquer estado exceto Entregue.
 
 #### Scenario: Avançar status válido
 - **WHEN** admin envia PATCH /v1/orders/:id/status com próximo estado válido
@@ -16,7 +16,7 @@ O sistema DEVE implementar a máquina de estados: Novo → Pago → Preparação
 - **THEN** sistema retorna 422 Unprocessable Entity
 
 ### Requirement: Validação de Estoque
-O sistema DEVE validar o estoque disponível no momento da confirmação do pedido.
+O sistema DEVE (MUST) validar o estoque disponível no momento da confirmação do pedido.
 
 #### Scenario: Estoque insuficiente
 - **WHEN** cliente tenta criar pedido com quantidade > estoque disponível

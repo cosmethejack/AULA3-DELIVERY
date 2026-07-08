@@ -1,0 +1,6 @@
+schema: spec-driven
+created: 2026-06-23
+title: Histórico de Pedidos do Cliente ("Meus Pedidos") — RF-02
+risk: baixo
+dependencies: [customer-authentication, authenticated-checkout]
+status: proposed

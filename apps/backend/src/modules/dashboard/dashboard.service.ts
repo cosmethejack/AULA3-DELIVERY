@@ -12,7 +12,7 @@ export class DashboardService {
     startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay());
     const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
 
-    const [totalOrders, totalRevenue, paymentsByStatus, topProducts] = await Promise.all([
+    const [totalOrders, _totalRevenue, paymentsByStatus, topProducts] = await Promise.all([
       this.prisma.order.count(),
       this.prisma.payment.aggregate({ _sum: { valor: true }, where: { status: "APPROVED" } }),
       this.prisma.payment.groupBy({

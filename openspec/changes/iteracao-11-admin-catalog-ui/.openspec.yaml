@@ -1,0 +1,6 @@
+schema: spec-driven
+created: 2026-06-30
+title: UI de Gestão de Catálogo — RF-03/RF-04
+risk: baixo
+dependencies: [iteracao-08-catalog-categories-api, iteracao-09-catalog-products-api, iteracao-05-identity-rbac-foundation]
+status: proposed

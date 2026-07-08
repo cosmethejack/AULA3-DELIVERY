@@ -1,0 +1,6 @@
+schema: spec-driven
+created: 2026-06-30
+title: Histórico & Acompanhamento do Cliente — "Meus Pedidos" — RF-02
+risk: baixo
+dependencies: [iteracao-15-cart-and-checkout, iteracao-13-customer-registration-auth, iteracao-16-order-state-machine]
+status: proposed

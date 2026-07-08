@@ -1,0 +1,6 @@
+schema: spec-driven
+created: 2026-06-30
+title: UI de Gestão de Pedidos (Admin) — RF-06
+risk: baixo
+dependencies: [iteracao-16-order-state-machine, iteracao-05-identity-rbac-foundation]
+status: proposed

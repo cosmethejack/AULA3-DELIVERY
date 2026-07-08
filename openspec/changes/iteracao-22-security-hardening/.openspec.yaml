@@ -1,0 +1,6 @@
+schema: spec-driven
+created: 2026-06-30
+title: Endurecimento de Segurança — Rate Limit, CORS, Headers, IDOR
+risk: medio
+dependencies: [iteracao-05-identity-rbac-foundation, iteracao-15-cart-and-checkout]
+status: proposed

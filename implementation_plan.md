@@ -181,3 +181,38 @@ Uma fase só está concluída quando:
 - `npm run lint` → saída zero
 - `npm run test` → saída zero (cobertura ≥ 80% backend / ≥ 70% frontend)
 - `npm run build` → sem erros
+
+---
+
+## Integração Playwright + Clerk (E2E Tests)
+
+### Objetivo
+Configurar a integração do Playwright com o Clerk para os testes E2E, injetando o token de autenticação e evitando o uso direto de componentes do Clerk no frontend, conforme especificado na arquitetura (`docs/architecture.md`).
+
+### Alterações Propostas
+
+#### 1. Criar um projeto de Setup Global no Playwright
+- [NEW] `tests/auth.setup.ts`
+  - Criar um teste de setup do Playwright que chama `getClerkToken()` para buscar o token JWT válido do usuário de teste.
+  - Injetar este token no `localStorage` (como `customer-token` e `admin-token`, para compatibilidade) usando `page.evaluate()`.
+  - Salvar o estado do navegador (Storage State) em `playwright/.auth/user.json`.
+
+#### 2. Atualizar as Configurações do Playwright
+- [MODIFY] `playwright.config.ts`
+  - Adicionar o projeto `setup` apontando para o arquivo `tests/auth.setup.ts`.
+  - Atualizar o projeto `chromium` para depender do `setup` e utilizar a opção `storageState` apontando para `playwright/.auth/user.json`.
+
+#### 3. Refatorar os Testes Existentes
+- [MODIFY] `apps/frontend/tests/scaffold.spec.ts`
+  - Remover a lógica manual `test.beforeAll` de busca e injeção do token.
+
+#### 4. Atualizar o arquivo .gitignore
+- [MODIFY] `.gitignore`
+  - Adicionar o diretório de auth do playwright (`playwright/.auth`) ao `.gitignore`.
+
+### User Review Required
+> [!WARNING]
+> Atualmente, a aplicação usa `admin-token` e `customer-token` no `localStorage`. O script `auth.ts` só obtém token para um CUSTOMER. Neste setup inicial, injetaremos o mesmo token para ambas as chaves, mantendo a retrocompatibilidade com os testes existentes. Gostaria de criar também uma configuração segregada para ADMIN (usando um mock de conta ADMIN no Clerk) agora, ou mantemos simples apenas injetando o token de CUSTOMER para tudo no momento?
+
+### Verification Plan
+- Rodar os testes E2E do frontend (`npx playwright test`) e verificar se a sessão foi restaurada corretamente pelo Setup.

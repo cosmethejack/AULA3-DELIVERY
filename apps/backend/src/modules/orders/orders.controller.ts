@@ -7,7 +7,7 @@ export class OrdersController {
   constructor(private readonly ordersService: OrdersService) {}
 
   @Post()
-  create(@Body() body: any, @Req() req: any) {
+  create(@Body() body: any, @Req() _req: any) {
     return this.ordersService.create(body);
   }
 
